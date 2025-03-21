@@ -1,0 +1,800 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2299.77">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="ja"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;英単語テストアプリ&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.0.2/tesseract.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Helvetica Neue', Arial, sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.6;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #f5f5f5;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>max-width: 800px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>h1, h2, h3 {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #333;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>input, button, select {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 8px 12px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 5px 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #ddd;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>button {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #4CAF50;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>button:hover {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #45a049;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>button:disabled {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #cccccc;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: not-allowed;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.test-container, .result-container, .retest-container, .ocr-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #ddd;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.word-item {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 15px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #f9f9f9;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.incorrect {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #ffebee;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.correct {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #e8f5e9;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.hidden {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#importInput, #ocrImageInput {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.tabs {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>flex-wrap: wrap;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.tab {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 10px 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #ddd;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 5px 5px 0 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-right: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 5px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.tab.active {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #4CAF50;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.tab-content {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.tab-content.active {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: block;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#ocrPreview {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>max-width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>max-height: 300px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 1px solid #ddd;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.loading {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: inline-block;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 3px solid rgba(0,0,0,.3);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-top-color: #4CAF50;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animation: spin 1s ease-in-out infinite;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-left: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>@keyframes spin {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>to { transform: rotate(360deg); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.progress-bar-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #f3f3f3;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 10px 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.progress-bar {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>height: 20px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #4CAF50;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>width: 0%;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>transition: width 0.3s;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.extracted-word {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #e3f2fd;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>padding: 8px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 5px 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 4px;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>justify-content: space-between;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.extracted-word button {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin-left: 10px;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.checkbox-container {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>margin: 10px 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1&gt;英単語テストアプリ&lt;/h1&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="tabs"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="tab active" data-tab="words-tab"&gt;単語登録&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="tab" data-tab="test-tab"&gt;テスト&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="tab" data-tab="results-tab"&gt;結果&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="tab" data-tab="retest-tab"&gt;再テスト&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="tab" data-tab="ocr-tab"&gt;紙テスト読み取り&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="words-tab" class="tab-content active"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2&gt;単語の登録&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label for="englishWord"&gt;英単語:&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="text" id="englishWord" placeholder="英単語を入力"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;label for="japaneseWord"&gt;日本語の意味:&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="text" id="japaneseWord" placeholder="日本語の意味を入力"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="addWord"&gt;単語を追加&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="importButton"&gt;CSVからインポート&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="file" id="importInput" accept=".csv"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="exportCSV"&gt;CSVにエクスポート&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3&gt;登録された単語リスト&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="wordList"&gt;&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;button id="startTest"&gt;テストを開始&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="test-tab" class="tab-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2&gt;英単語テスト&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="test-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="currentQuestion"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;input type="text" id="answerInput" placeholder="日本語の意味を入力"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="submitAnswer"&gt;回答する&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="feedback"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="progress"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="results-tab" class="tab-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2&gt;テスト結果&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="result-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="resultSummary"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="resultDetails"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="generatePDF"&gt;結果をPDFで保存&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="startRetest"&gt;間違えた単語だけで再テスト&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="retest-tab" class="tab-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2&gt;間違えた単語の再テスト&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="retest-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="retestQuestion"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;input type="text" id="retestAnswerInput" placeholder="日本語の意味を入力"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="submitRetestAnswer"&gt;回答する&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="retestFeedback"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="retestProgress"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="ocr-tab" class="tab-content"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2&gt;紙テスト読み取り (OCR)&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="ocr-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;紙のテストをスキャンまたは撮影した画像をアップロードして、間違えた単語を抽出します。&lt;/p&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="ocrUploadButton"&gt;画像をアップロード&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;input type="file" id="ocrImageInput" accept="image/*"&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="ocrProcessingStatus"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="progress-bar-container" id="ocrProgressContainer" style="display: none;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="progress-bar" id="ocrProgressBar"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;img id="ocrPreview"&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;div id="ocrResultContainer" style="display: none; margin-top: 20px;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;抽出された単語&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;以下の単語がOCRによって抽出されました。単語の形式は「英単語 (✗)」という形式を検出します。&lt;/p&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div id="extractedWords"&gt;&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="checkbox-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;input type="checkbox" id="matchWithVocabulary" checked&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;label for="matchWithVocabulary"&gt;単語リストに存在する単語のみを表示&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button id="startOcrRetest" disabled&gt;抽出された単語でテストを開始&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// データ構造</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let vocabularyList = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let currentWordIndex = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let incorrectWords = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let testResults = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let retestCurrentIndex = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let retestResults = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let ocrExtractedWords = [];</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// DOMが読み込まれた後に実行</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.addEventListener('DOMContentLoaded', function() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// タブ切り替え</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const tabs = document.querySelectorAll('.tab');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>tabs.forEach(tab =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>tab.addEventListener('click', () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// アクティブなタブクラスを切り替え</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.querySelector('.tab.active').classList.remove('active');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>tab.classList.add('active');</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// アクティブなコンテンツを切り替え</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.querySelector('.tab-content.active').classList.remove('active');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const tabContentId = tab.getAttribute('data-tab');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById(tabContentId).classList.add('active');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// ローカルストレージから単語リストを読み込み</p>
+<p class="p1"><span class="Apple-converted-space">            </span>loadVocabularyList();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 単語追加ボタン</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('addWord').addEventListener('click', addVocabularyWord);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// テスト開始ボタン</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('startTest').addEventListener('click', startTest);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 回答送信ボタン</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('submitAnswer').addEventListener('click', submitAnswer);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('answerInput').addEventListener('keypress', function(e) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (e.key === 'Enter') {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>submitAnswer();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// PDF生成ボタン</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('generatePDF').addEventListener('click', generatePDF);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 再テスト開始ボタン</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('startRetest').addEventListener('click', startRetest);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 再テスト回答送信ボタン</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('submitRetestAnswer').addEventListener('click', submitRetestAnswer);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('retestAnswerInput').addEventListener('keypress', function(e) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (e.key === 'Enter') {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>submitRetestAnswer();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// CSVインポートボタン</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('importButton').addEventListener('click', function() {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('importInput').click();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// CSVファイル読み込み</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('importInput').addEventListener('change', importCSV);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// CSVエクスポートボタン</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('exportCSV').addEventListener('click', exportCSV);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// OCR画像アップロードボタン</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('ocrUploadButton').addEventListener('click', function() {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('ocrImageInput').click();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// OCR画像読み込み</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('ocrImageInput').addEventListener('change', handleOcrImageUpload);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 単語リスト照合チェックボックス</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('matchWithVocabulary').addEventListener('change', filterExtractedWords);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// OCRで抽出した単語でテスト開始</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('startOcrRetest').addEventListener('click', startOcrBasedTest);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 単語リストをローカルストレージから読み込む</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function loadVocabularyList() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const storedList = localStorage.getItem('vocabularyList');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (storedList) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>vocabularyList = JSON.parse(storedList);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>renderWordList();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 単語リストをローカルストレージに保存</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function saveVocabularyList() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>localStorage.setItem('vocabularyList', JSON.stringify(vocabularyList));</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 単語リストの表示を更新</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function renderWordList() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const wordListElement = document.getElementById('wordList');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>wordListElement.innerHTML = '';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>vocabularyList.forEach((word, index) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const wordItem = document.createElement('div');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>wordItem.className = 'word-item';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>wordItem.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;strong&gt;${word.english}&lt;/strong&gt;: ${word.japanese}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;button onclick="removeWord(${index})"&gt;削除&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>wordListElement.appendChild(wordItem);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 単語を追加</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function addVocabularyWord() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const englishInput = document.getElementById('englishWord');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const japaneseInput = document.getElementById('japaneseWord');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const english = englishInput.value.trim();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const japanese = japaneseInput.value.trim();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (english &amp;&amp; japanese) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>vocabularyList.push({ english, japanese });</p>
+<p class="p1"><span class="Apple-converted-space">                </span>saveVocabularyList();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>renderWordList();</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 入力フィールドをクリア</p>
+<p class="p1"><span class="Apple-converted-space">                </span>englishInput.value = '';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>japaneseInput.value = '';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>englishInput.focus();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('英単語と日本語の意味を入力してください。');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 単語を削除</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function removeWord(index) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>vocabularyList.splice(index, 1);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>saveVocabularyList();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>renderWordList();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// CSVファイルをインポート</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function importCSV(event) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const file = event.target.files[0];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!file) return;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const reader = new FileReader();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>reader.onload = function(e) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const contents = e.target.result;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const lines = contents.split('\n');</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>lines.forEach(line =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (line.trim()) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>const [english, japanese] = line.split(',').map(item =&gt; item.trim());</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>if (english &amp;&amp; japanese) {</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>vocabularyList.push({ english, japanese });</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>saveVocabularyList();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>renderWordList();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>};</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>reader.readAsText(file);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>event.target.value = null; // ファイル入力をリセット</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// CSVファイルにエクスポート</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function exportCSV() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (vocabularyList.length === 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('単語がありません。');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>let csvContent = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>vocabularyList.forEach(word =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>csvContent += `${word.english},${word.japanese}\n`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const blob = new Blob([csvContent], { type: 'text/csv' });</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const url = URL.createObjectURL(blob);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const a = document.createElement('a');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>a.href = url;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>a.download = '英単語リスト.csv';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>a.click();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>URL.revokeObjectURL(url);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}, 100);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// テストを開始</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function startTest() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (vocabularyList.length === 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('テストを開始するには単語を追加してください。');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// テスト状態の初期化</p>
+<p class="p1"><span class="Apple-converted-space">            </span>currentWordIndex = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>testResults = [];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>incorrectWords = [];</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// ランダムに単語をシャッフル</p>
+<p class="p1"><span class="Apple-converted-space">            </span>shuffleArray(vocabularyList);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// テスト画面を表示</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelector('.tab[data-tab="test-tab"]').click();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 最初の問題を表示</p>
+<p class="p1"><span class="Apple-converted-space">            </span>showNextQuestion();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 配列をシャッフル</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function shuffleArray(array) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = array.length - 1; i &gt; 0; i--) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const j = Math.floor(Math.random() * (i + 1));</p>
+<p class="p1"><span class="Apple-converted-space">                </span>[array[i], array[j]] = [array[j], array[i]];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 次の問題を表示</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showNextQuestion() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (currentWordIndex &lt; vocabularyList.length) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const word = vocabularyList[currentWordIndex];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('currentQuestion').innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;問題 ${currentWordIndex + 1}/${vocabularyList.length}&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;「${word.english}」の日本語の意味は？&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('answerInput').value = '';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('feedback').innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('progress').innerHTML = `進捗: ${currentWordIndex}/${vocabularyList.length}`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('answerInput').focus();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// テスト終了</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showTestResults();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 回答を提出</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function submitAnswer() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const userAnswer = document.getElementById('answerInput').value.trim();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!userAnswer) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('回答を入力してください。');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const currentWord = vocabularyList[currentWordIndex];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const isCorrect = userAnswer === currentWord.japanese;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 結果を記録</p>
+<p class="p1"><span class="Apple-converted-space">            </span>testResults.push({</p>
+<p class="p1"><span class="Apple-converted-space">                </span>english: currentWord.english,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>japanese: currentWord.japanese,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>userAnswer: userAnswer,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>isCorrect: isCorrect</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 間違えた単語を記録</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!isCorrect) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>incorrectWords.push(currentWord);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// フィードバックを表示</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('feedback').innerHTML = isCorrect<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>? '&lt;p style="color: green;"&gt;正解!&lt;/p&gt;'<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>: `&lt;p style="color: red;"&gt;不正解。正解は「${currentWord.japanese}」です。&lt;/p&gt;`;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 一時停止して次の問題へ</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>currentWordIndex++;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showNextQuestion();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}, 1500);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// テスト結果を表示</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showTestResults() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 結果タブに移動</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelector('.tab[data-tab="results-tab"]').click();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const correctCount = testResults.filter(result =&gt; result.isCorrect).length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const totalCount = testResults.length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const percentage = Math.round((correctCount / totalCount) * 100);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 結果サマリー</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('resultSummary').innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3&gt;テスト結果サマリー&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;総問題数: ${totalCount}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;正解数: ${correctCount}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;不正解数: ${totalCount - correctCount}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;正答率: ${percentage}%&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 詳細結果</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let detailsHTML = '&lt;h3&gt;詳細結果&lt;/h3&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>testResults.forEach((result, index) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>detailsHTML += `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="word-item ${result.isCorrect ? 'correct' : 'incorrect'}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;&lt;strong&gt;${index + 1}. ${result.english}&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;正解: ${result.japanese}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;あなたの回答: ${result.userAnswer}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;${result.isCorrect ? '✓ 正解' : '✗ 不正解'}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('resultDetails').innerHTML = detailsHTML;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 再テストボタン</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('startRetest').disabled = incorrectWords.length === 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// PDFを生成</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function generatePDF() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (testResults.length === 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('テスト結果がありません。');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const { jsPDF } = window.jspdf;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const doc = new jsPDF();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// タイトル</p>
+<p class="p1"><span class="Apple-converted-space">            </span>doc.setFontSize(18);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>doc.text('英単語テスト結果', 105, 20, { align: 'center' });</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 結果サマリー</p>
+<p class="p1"><span class="Apple-converted-space">            </span>doc.setFontSize(14);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>doc.text('テスト結果サマリー', 20, 40);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const correctCount = testResults.filter(result =&gt; result.isCorrect).length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const totalCount = testResults.length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const percentage = Math.round((correctCount / totalCount) * 100);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>doc.setFontSize(12);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>doc.text(`総問題数: ${totalCount}`, 25, 50);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>doc.text(`正解数: ${correctCount}`, 25, 58);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>doc.text(`不正解数: ${totalCount - correctCount}`, 25, 66);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>doc.text(`正答率: ${percentage}%`, 25, 74);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 詳細結果</p>
+<p class="p1"><span class="Apple-converted-space">            </span>doc.setFontSize(14);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>doc.text('詳細結果', 20, 90);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>let y = 100;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>testResults.forEach((result, index) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 新しいページが必要かチェック</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (y &gt; 270) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>doc.addPage();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>y = 20;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>doc.setFontSize(12);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>doc.text(`${index + 1}. ${result.english}`, 25, y);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>doc.text(`正解: ${result.japanese}`, 30, y + 8);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>doc.text(`回答: ${result.userAnswer}`, 30, y + 16);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>doc.text(result.isCorrect ? '✓ 正解' : '✗ 不正解', 30, y + 24);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>y += 32;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 間違えた単語のリスト</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (incorrectWords.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 新しいページが必要かチェック</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (y &gt; 240) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>doc.addPage();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>y = 20;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>doc.setFontSize(14);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>doc.text('間違えた単語リスト', 20, y);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>y += 10;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>incorrectWords.forEach((word, index) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// 新しいページが必要かチェック</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (y &gt; 270) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>doc.addPage();</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>y = 20;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>doc.setFontSize(12);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>doc.text(`${index + 1}. ${word.english} - ${word.japanese}`, 25, y);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>y += 8;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>});</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// PDFを保存</p>
+<p class="p1"><span class="Apple-converted-space">            </span>doc.save('英単語テスト結果.pdf');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 再テストを開始</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function startRetest() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (incorrectWords.length === 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('間違えた単語がありません。');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 再テスト状態の初期化</p>
+<p class="p1"><span class="Apple-converted-space">            </span>retestCurrentIndex = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>retestResults = [];</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 間違えた単語をシャッフル</p>
+<p class="p1"><span class="Apple-converted-space">            </span>shuffleArray(incorrectWords);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 再テスト画面を表示</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelector('.tab[data-tab="retest-tab"]').click();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 最初の問題を表示</p>
+<p class="p1"><span class="Apple-converted-space">            </span>showNextRetestQuestion();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 次の再テスト問題を表示</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showNextRetestQuestion() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (retestCurrentIndex &lt; incorrectWords.length) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const word = incorrectWords[retestCurrentIndex];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('retestQuestion').innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h3&gt;問題 ${retestCurrentIndex + 1}/${incorrectWords.length}&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;「${word.english}」の日本語の意味は？&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('retestAnswerInput').value = '';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('retestFeedback').innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('retestProgress').innerHTML = `進捗: ${retestCurrentIndex}/${incorrectWords.length}`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('retestAnswerInput').focus();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 再テスト終了</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showRetestResults();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 再テストの回答を提出</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function submitRetestAnswer() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const userAnswer = document.getElementById('retestAnswerInput').value.trim();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!userAnswer) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('回答を入力してください。');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const currentWord = incorrectWords[retestCurrentIndex];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const isCorrect = userAnswer === currentWord.japanese;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 結果を記録</p>
+<p class="p1"><span class="Apple-converted-space">            </span>retestResults.push({</p>
+<p class="p1"><span class="Apple-converted-space">                </span>english: currentWord.english,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>japanese: currentWord.japanese,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>userAnswer: userAnswer,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>isCorrect: isCorrect</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// フィードバックを表示</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('retestFeedback').innerHTML = isCorrect<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>? '&lt;p style="color: green;"&gt;正解!&lt;/p&gt;'<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>: `&lt;p style="color: red;"&gt;不正解。正解は「${currentWord.japanese}」です。&lt;/p&gt;`;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 一時停止して次の問題へ</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(() =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>retestCurrentIndex++;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>showNextRetestQuestion();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}, 1500);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 再テスト結果を表示</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function showRetestResults() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 結果タブに移動</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.querySelector('.tab[data-tab="results-tab"]').click();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const correctCount = retestResults.filter(result =&gt; result.isCorrect).length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const totalCount = retestResults.length;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const percentage = Math.round((correctCount / totalCount) * 100);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 結果サマリー</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('resultSummary').innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;h3&gt;再テスト結果サマリー&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;総問題数: ${totalCount}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;正解数: ${correctCount}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;不正解数: ${totalCount - correctCount}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;正答率: ${percentage}%&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 詳細結果</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let detailsHTML = '&lt;h3&gt;詳細結果&lt;/h3&gt;';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>retestResults.forEach((result, index) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>detailsHTML += `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;div class="word-item ${result.isCorrect ? 'correct' : 'incorrect'}"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;&lt;strong&gt;${index + 1}. ${result.english}&lt;/strong&gt;&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;正解: ${result.japanese}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;あなたの回答: ${result.userAnswer}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;p&gt;${result.isCorrect ? '✓ 正解' : '✗ 不正解'}&lt;/p&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('resultDetails').innerHTML = detailsHTML;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// OCR画像アップロードの処理</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function handleOcrImageUpload(event) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const file = event.target.files[0];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!file) return;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const preview = document.getElementById('ocrPreview');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>preview.style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>preview.src = URL.createObjectURL(file);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const statusElement = document.getElementById('ocrProcessingStatus');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>statusElement.innerHTML = 'OCR処理を開始しています...&lt;div class="loading"&gt;&lt;/div&gt;';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// プログレスバーを表示</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const progressContainer = document.getElementById('ocrProgressContainer');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const progressBar = document.getElementById('ocrProgressBar');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>progressContainer.style.display = 'block';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>progressBar.style.width = '0%';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// OCR処理開始</p>
+<p class="p1"><span class="Apple-converted-space">            </span>processOcrImage(file);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// OCR画像処理</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function processOcrImage(file) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const progressBar = document.getElementById('ocrProgressBar');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const statusElement = document.getElementById('ocrProcessingStatus');</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>Tesseract.recognize(</p>
+<p class="p1"><span class="Apple-converted-space">                </span>file,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>'eng', // 英語を指定</p>
+<p class="p1"><span class="Apple-converted-space">                </span>{<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>logger: progress =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>if (progress.status === 'recognizing text') {</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>const percent = Math.round(progress.progress * 100);</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>progressBar.style.width = `${percent}%`;</p>
+<p class="p1"><span class="Apple-converted-space">                            </span>statusElement.innerHTML = `OCR処理中... ${percent}%&lt;div class="loading"&gt;&lt;/div&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+</body>
+</html>
